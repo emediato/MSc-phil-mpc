@@ -25,6 +25,10 @@ https://www.researchgate.net/post/How_to_generate_PWM_signal_for_220_volts_Vin_v
 
 # VHDL 
 
+
+article: FPGA-Based HIL Emulation of Power Electronics Circuit Using Device-Level Behavioral Modeling
+
+
 https://class.ece.iastate.edu/cpre488/resources/VHDL_Common_Mistakes_S2025.pdf
 
 https://www.keysight.com/br/pt/product/EL34243A/dc-electronic-load-dual-input-2x-150v-60a-300w-lan-usb.html
