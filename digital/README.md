@@ -4,7 +4,7 @@
 https://www.mathworks.com/help/mcb/gs/foc-pmsm-using-mcb-blocks-fpga-hardware.html
 https://www.mathworks.com/help/mcb/gs/examples-supporting-trenz-xilinx-zynq.html
 https://www.mathworks.com/help/hdlcoder/ug/run-hdl-workflow-as-a-script.html
-
+mathworks.com/help/hdlcoder/simscape-to-hdl.html
 
 #### quadprog
 https://www.mathworks.com/help/optim/ug/code-generation-in-quadprog.html
