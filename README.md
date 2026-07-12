@@ -6,9 +6,26 @@ P-HIL Motor Development for Master of Science In Engineering
 
 ### Mês 1 — Fundamentação e disparo de compras (Etapa 1)
 Semana 1: Estruturar a revisão. Levantar e organizar a base sobre P-HIL (estabilidade da interface, métodos de interface IDEAL/ITM/DIM, atrasos de loop). Disparar levantamento de componentes e iniciar cotações — esta é a ação crítica da semana.
+
 Semana 2: Revisão de FCS-MPC (função custo, horizonte, modelo de predição da carga RL com fcem). Fechar lista de compras de itens com lead time longo (FPGA board, gate drivers, SiC, amplificador) e emitir pedidos.
+
 Semana 3: Revisão de CCS-GPC (modelo CARIMA, equação Diofantina, ponderação, restrições). Mapear como os requisitos MIL-STD-704F / DO-160G se traduzem em métricas mensuráveis (transientes de tensão, distorção, faixa de frequência).
+
 Semana 4: Modelagem matemática da carga indutiva variável (RL + fcem) e do conversor. Fechar a fundamentação da Parte 1 da dissertação em rascunho.
+
+openExample('mcb/FieldOrientedControlOfPMSMUsingHardwareInTheLoopHILExample');
+
+https://www.pcbway.com/blog/Engineering_Technical/Successful_PCB_grounding_with_mixed_signal_chips___Part_2__Design_to_minimize_signal_path_crosstalk.html
+
+https://teses.usp.br/teses/disponiveis/3/3143/tde-09012026-094839/publico/GabrielGomesdeCarvalhoMouraCorr25.pdf
+
+https://www.mathworks.com/help/hdlcoder/ug/field-oriented-control-of-a-permanent-magnet-synchronous-machine.html
+
+load_system('hdlcoderFocCurrentFixptHdl');
+open_system('hdlcoderFocCurrentFixptHdl/FOC_Current_Control')
+makehdl('hdlcoderFocCurrentFixptHdl/FOC_Current_Control');
+https://www.mathworks.com/help/hdlcoder/ug/field-oriented-control-of-a-permanent-magnet-synchronous-machine.html
+
 
 ### Mês 2 — Modelo e simulação offline (transição Etapa 1 → 2)
 Semana 5: Implementar em MATLAB/Simulink o modelo da planta e o emulador de carga P-HIL (medir tensão → calcular corrente em tempo real).
