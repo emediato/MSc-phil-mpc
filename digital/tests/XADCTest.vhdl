@@ -1,6 +1,9 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
+-- https://www.youtube.com/watch?v=-jj0lHBCaOY
+
+    
 entity XADCTest is
     Port ( 
         clk : in STD_LOGIC;
