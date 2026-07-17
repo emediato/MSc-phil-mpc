@@ -25,7 +25,7 @@ https://www.researchgate.net/post/How_to_generate_PWM_signal_for_220_volts_Vin_v
 
 
 # VHDL 
-
+https://github.com/Digilent/Basys3/blob/master/Resources/XDC/Basys3_Master.xdc
 
 article: FPGA-Based HIL Emulation of Power Electronics Circuit Using Device-Level Behavioral Modeling
 
