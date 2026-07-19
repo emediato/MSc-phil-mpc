@@ -9,6 +9,14 @@ https://www.mathworks.com/help/hdlcoder/ug/run-hdl-workflow-as-a-script.html
 
 mathworks.com/help/hdlcoder/simscape-to-hdl.html
 
+https://www.mathworks.com/help/ecoder/xilinxzynq7000ec/ug/field-oriented-control-of-a-permanent-magnet-synchronous-machine.html
+https://www.mathworks.com/help/hdlcoder/ug/field-oriented-control-of-a-permanent-magnet-synchronous-machine.html
+https://www.mathworks.com/help/hdlcoder/modeling-hierarchy-and-synchronous-hardware-behavior.html?s_tid=CRUX_lftnav
+https://www.mathworks.com/help/mcb/gs/field-oriented-control-pmsm-using-hardware-in-the-loop-hil-simulation.html
+https://www.mathworks.com/help/hdlcoder/ug/single-precision-field-oriented-control-pmsm-model.html
+
+https://www.mathworks.com/help/hdlcoder/ug/using-ip-core-generation-from-matlab.html
+
 
 #### quadprog
 https://www.mathworks.com/help/optim/ug/code-generation-in-quadprog.html
