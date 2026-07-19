@@ -1,8 +1,12 @@
 ## project
 
 https://www.ianjohnston.com/index.php/projects/project-017-electronic-constant-current-dummy-load-v2-0
+https://www.youtube.com/watch?v=9fsf1CgnTRk
+https://www.youtube.com/watch?v=ySyOoFI5cqA
 
 https://dominik-workshop.github.io/electronic-load/  - https://www.youtube.com/watch?v=NScaRQj53l0
+
+https://www.youtube.com/@EletroPowerLab/videos?app=desktop
 
 
 ## SPICE
