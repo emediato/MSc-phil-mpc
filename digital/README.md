@@ -1,6 +1,5 @@
 # matlab
 
-
 https://www.mathworks.com/help/mcb/gs/foc-pmsm-using-mcb-blocks-fpga-hardware.html
 
 https://www.mathworks.com/help/mcb/gs/examples-supporting-trenz-xilinx-zynq.html
@@ -16,6 +15,11 @@ https://www.mathworks.com/help/mcb/gs/field-oriented-control-pmsm-using-hardware
 https://www.mathworks.com/help/hdlcoder/ug/single-precision-field-oriented-control-pmsm-model.html
 
 https://www.mathworks.com/help/hdlcoder/ug/using-ip-core-generation-from-matlab.html
+
+#### youtube 
+FOC https://www.youtube.com/watch?v=rhNmGbd2unQ
+FIR Filter https://www.youtube.com/watch?v=Tz9c8cNTlxs
+FIR IP Filter https://www.youtube.com/watch?v=yS5MsFkwzyU
 
 
 #### quadprog
