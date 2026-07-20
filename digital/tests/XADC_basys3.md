@@ -65,3 +65,44 @@ Multiple channels can be read in either the Independent or the Sequencer Mode.
 Finally, in the Simultaneous Mode, two ADC channels are read at the same time.  The two channels must be offset by 8, i.e., for example AUX channel 4 and 12 can be sampled simultaneously with the two on board ADCs in the FPGA.
 
 
+## No Hardware Manager — onde a senoide aparece
+
+4. Open Hardware Manager → Open Target → Program Device. A janela do ILA (hw_ila_1) abre sozinha com as duas probes.
+
+5. Capture Setup (a configuração que separa sucesso de frustração): na aba Capture Setup, Capture Mode = BASIC; adicione a condição drdy == 1 (R = valor 1) como capture qualifier. Resultado: o ILA só armazena uma amostra quando há conversão nova — cada linha do buffer = uma amostra do XADC (~1 µs entre elas), e os 65536 pontos cobrem ~4 ciclos de 60 Hz ou ~26 ciclos de 400 Hz.
+
+6. Trigger Setup: adicione codigo == 800 (radix hex) — cruzamento do meio da escala; Trigger position in window = 32768 (centro), para ver ciclos antes e depois do disparo.
+
+7. O toque final — desenhar como onda: na janela de waveform, botão direito sobre codigo → Radix → Unsigned Decimal → botão direito de novo → Waveform Style → Analog. Ajuste a altura da linha (arraste a borda). Clique em Run Trigger (▶). Com o gerador ligado em 60 Hz, a senoide aparece desenhada na tela, oscilando em torno de ~2048 — esta é a evidência visual do ensaio.
+
+8. Medir e exportar: dois marcadores na janela dão pico+, pico− e o valor médio; para levar ao MATLAB, no Tcl Console:
+
+tcl
+write_hw_ila_data -csv_file ensaio_60hz.csv [upload_hw_ila_data hw_ila_1]
+
+Troque o gerador para 400 Hz, Run Trigger de novo, exporte ensaio_400hz.csv. Pronto — os dois arquivos do ensaio do professor, com a forma de onda vista na tela e os dados brutos arquivados.
+
+## Caminho GUI (recomendado para a primeira ida)
+Abra o Vivado → abra o projeto (vivado_proj/xadc_ila_basys3.xpr) — ou, se estiver noutro PC, basta o Vivado Lab Edition/qualquer Vivado, nem precisa do projeto: só do par de arquivos top.bit + top.ltx (leve-os num pendrive; estão em vivado_proj/xadc_ila_basys3.runs/impl_1/).
+Flow → Open Hardware Manager → Open Target → Auto Connect (Basys3 no USB, chave POWER ligada).
+Atenção ao detalhe que pega todo mundo: se a placa perdeu a energia desde a gravação, o bitstream sumiu (a FPGA é volátil) — reprograme: Program Device → aponte o top.bit e, no campo de baixo, o top.ltx (é o arquivo de probes; sem ele o ILA não aparece!). Se a placa ficou energizada, só Refresh Device e o hw_ila_1 já aparece.
+Na janela do ILA: Capture Setup → mode BASIC → qualifier drdy == 1; Trigger Setup → codigo == 800 (hex), posição 32768.
+Botão direito na probe codigo → Radix → Unsigned Decimal → Waveform Style → Analog.
+Ligue o gerador (High-Z, High 0,9 / Low 0,1, 60 Hz, conferido no osciloscópio) → Run Trigger (▶) → senoide na tela.
+Gravar o resultado — no Tcl Console, com a captura na tela:
+tcl
+write_hw_ila_data -force -csv_file ensaio_60hz.csv [current_hw_ila_data]
+
+(O CSV cai na pasta de onde o Vivado foi aberto — pwd mostra onde; cd antes se quiser mandar direto para a pasta de evidências.) Troque para 400 Hz, Run Trigger de novo, exporte ensaio_400hz.csv.
+
+Caminho script (depois que o fluxo estiver redondo)
+
+Da raiz do projeto, com a placa no USB:
+
+vivado -mode batch -source scripts/hw_run.tcl -tclargs ensaio_60hz
+
+Ele reprograma, arma tudo e fica em "Aguardando trigger..." — ligue o gerador nesse momento; o CSV sai sozinho. Depois -tclargs ensaio_400hz.
+
+Checklist de bolso para anotar junto dos CSVs: tensões reais lidas no osciloscópio (não no display do gerador), código no zero (~2048), pico+ e pico−, frequência, data. E se o Auto Connect não achar a placa: cabo na porta PROG (a micro-USB ao lado da chave), chave ligada, e nenhum outro programa (Adept/outro Vivado) segurando o JTAG.
+
+Qualquer coisa estranha na tela — platôs, valores presos, trigger que não dispara — me escreve do lab que a gente depura em tempo real. Bom ensaio! 🙂
