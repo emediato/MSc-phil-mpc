@@ -1,6 +1,6 @@
-function analise_xadc_comentado(pasta)
+function analise_xadc(pasta)
 % =========================================================================
-% ANALISE_XADC_COMENTADO
+% ANALISE_XAD
 %
 % Analisa CSVs exportados do ILA (Basys3 / XADC) para um ensaio de injecao
 % de sinal conhecido DIRETO no pino do XADC (sem circuito de condicionamento).
