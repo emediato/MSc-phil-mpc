@@ -41,12 +41,11 @@ https://github.com/Digilent/Basys3/blob/master/Resources/XDC/Basys3_Master.xdc
 
 article: FPGA-Based HIL Emulation of Power Electronics Circuit Using Device-Level Behavioral Modeling
 
-
 https://class.ece.iastate.edu/cpre488/resources/VHDL_Common_Mistakes_S2025.pdf
 
 https://www.keysight.com/br/pt/product/EL34243A/dc-electronic-load-dual-input-2x-150v-60a-300w-lan-usb.html
 
-
+https://physics.umd.edu/hep/drew/495/xadc.html
 
  o HDL Coder não suporta diretamente os blocos do Simscape Electrical Specialized Power Systems (o antigo SimPowerSystems). 
  
