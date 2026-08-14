@@ -4,7 +4,7 @@ P-HIL Motor Development for Master of Science In Engineering
 
 # CRONOGRAMA
 
-### Mês 1 — Fundamentação e disparo de compras (Etapa 1)
+#### Mês 1 — Fundamentação e disparo de compras (Etapa 1)
 Semana 1: Estruturar a revisão. Levantar e organizar a base sobre P-HIL (estabilidade da interface, métodos de interface IDEAL/ITM/DIM, atrasos de loop). Disparar levantamento de componentes e iniciar cotações — esta é a ação crítica da semana.
 
 Semana 2: Revisão de FCS-MPC (função custo, horizonte, modelo de predição da carga RL com fcem). Fechar lista de compras de itens com lead time longo (FPGA board, gate drivers, SiC, amplificador) e emitir pedidos.
@@ -27,26 +27,27 @@ makehdl('hdlcoderFocCurrentFixptHdl/FOC_Current_Control');
 https://www.mathworks.com/help/hdlcoder/ug/field-oriented-control-of-a-permanent-magnet-synchronous-machine.html
 
 
-### Mês 2 — Modelo e simulação offline (transição Etapa 1 → 2)
+#### Mês 2 — Modelo e simulação offline (transição Etapa 1 → 2)
 Semana 5: Implementar em MATLAB/Simulink o modelo da planta e o emulador de carga P-HIL (medir tensão → calcular corrente em tempo real).
 Semana 6: Implementar FCS-MPC em simulação. Validar resposta transitória e regime permanente contra a teoria.
 Semana 7: Implementar CCS-GPC em simulação nas mesmas condições. Primeira comparação offline FCS-MPC vs GPC.
 Semana 8: Definir métricas formais (THD, tempo de acomodação, erro RMS, esforço de chaveamento, custo computacional estimado em ciclos). Congelar o protocolo de comparação que será usado igual nas duas etapas seguintes.
 
 
-### Mês 3 — Desenvolvimento FPGA (Etapa 2, parte 1)
+#### Mês 3 — Desenvolvimento FPGA (Etapa 2, parte 1)
 Semana 9: Arquitetura do hardware digital. Definir formato numérico (ponto fixo vs ponto flutuante), pipeline, e particionamento do algoritmo. Decisão de quanto vai para FPGA vs processador.
 Semana 10: Implementar o modelo de predição da carga em RTL. Testbench e verificação numérica contra o MATLAB (bit-accuracy aceitável).
 Semana 11: Implementar o núcleo do FCS-MPC na FPGA (avaliação da função custo sobre os estados de chaveamento). Verificar latência e timing closure.
 Semana 12: Implementar GPC na FPGA — atenção ao custo das operações matriciais. Avaliar se cabe em recursos e timing; aqui é comum precisar de simplificação (solução explícita, pré-computação).
 
 
-Mês 4 — Validação HIL (Etapa 2, parte 2)
+#### Mês 4 — Validação HIL (Etapa 2, parte 2)
 Semana 13: Montar o setup HIL (FPGA emulando carga ↔ FPGA do controlador, ou planta no simulador em tempo real). Validar a malha de processamento de sinais end-to-end.
 Semana 14: Validar FCS-MPC em HIL. Coletar dados de transitório e regime permanente.
 Semana 15: Validar GPC em HIL nas mesmas condições. Coletar dataset comparável.
 Semana 16: Comparação sistemática FCS-MPC vs GPC em HIL. Marco: neste ponto o mestrado já tem resultado defensável mesmo se a etapa experimental falhar. Escrever a Parte 2 (resultados HIL).
-Mês 5 — Bancada experimental (Etapa 3, parte 1)
+
+#### Mês 5 — Bancada experimental (Etapa 3, parte 1)
 Semana 17: Receber/conferir hardware, montar e testar PCB do conversor e estágio de potência em baixa tensão. Validar gate drivers e proteções isoladamente.
 Semana 18: Integrar FPGA ↔ conversor. Testes em malha aberta com carga resistiva simples antes de fechar a malha.
 Semana 19: Fechar a malha com FCS-MPC em bancada, potência reduzida. Depuração de ruído, medição, sincronismo ADC.
