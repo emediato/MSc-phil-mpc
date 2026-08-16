@@ -6,9 +6,13 @@ P-HIL Motor Development for Master of Science In Engineering
 
 #### Mês 1 -2 — Fundamentação e disparo de compras (Etapa 1)
 Semana 1: Estruturar a revisão. Levantar e organizar a base sobre P-HIL (estabilidade da interface, métodos de interface IDEAL/ITM/DIM, atrasos de loop). Disparar levantamento de componentes e iniciar cotações — esta é a ação crítica da semana.
+
 Semana 2: Revisão de FCS-MPC (função custo, horizonte, modelo de predição da carga RL com fcem). Fechar lista de compras de itens com lead time longo (FPGA board, gate drivers, SiC, amplificador) e emitir pedidos.
+
 Semana 3: Revisão de CCS-GPC (modelo CARIMA, equação Diofantina, ponderação, restrições). Mapear como os requisitos MIL-STD-704F / DO-160G se traduzem em métricas mensuráveis (transientes de tensão, distorção, faixa de frequência).
+
 Semana 4: Modelagem matemática da carga indutiva variável (RL + fcem) e do conversor. Fechar a fundamentação da Parte 1 da dissertação em rascunho.
+
 Modelagem do conversor três-níveis + filtro + carga RL com fcem; discretização já pensando no ponto fixo de 12 bits alinhado ao XADC.
 Modelagem da máquina no referencial dq com parâmetros aeronáuticos. 
 
@@ -26,7 +30,9 @@ HW = Subsistema de aquisição — Hall isolado, divisor resistivo isolado, sens
 
 #### Mês 2 — Modelo e simulação offline (transição Etapa 1 → 2) - psim, simulink, PLECS
 Semana 5: Implementar em MATLAB/Simulink o modelo da planta e o emulador de carga P-HIL (medir tensão → calcular corrente em tempo real).
+
 Semana 6: Implementar FCS-MPC em simulação. Validar resposta transitória e regime permanente contra a teoria.
+
 Semana 7: Implementar CCS-GPC em simulação nas mesmas condições. Primeira comparação offline FCS-MPC vs GPC.
 
 ###### Definir métricas formais (THD, tempo de acomodação, erro RMS, esforço de chaveamento, custo computacional estimado em ciclos). Congelar o protocolo de comparação que será usado igual nas duas etapas seguintes.
@@ -41,6 +47,7 @@ Definir formato numérico (ponto fixo vs ponto flutuante), pipeline, e particion
 Semana 10: Implementar o modelo de predição da carga em RTL. Testbench e verificação numérica contra o MATLAB (bit-accuracy aceitável).
 
 Semana 11: Implementar o núcleo do FCS-MPC na FPGA (avaliação da função custo sobre os estados de chaveamento). Verificar latência e timing closure.
+
 Semana 12: Implementar GPC na uC — atenção ao custo das operações matriciais. Avaliar se cabe em recursos e timing; aqui é comum precisar de simplificação (solução explícita, pré-computação).
 
 ###### Arquitetura digital: partição FPGA vs DSP/STM32, formato ponto fixo 12 bits, pipeline. Aqui roda o checkpoint de viabilidade do STM32 (cabe GPC-QP? se não, redireciona conforme decisão 2).
@@ -52,9 +59,13 @@ Semana 12: Implementar GPC na uC — atenção ao custo das operações matricia
 
 #### Mês 4 5 — Validação HIL (Etapa 2, parte 2) 
 Semana 13: Montar o setup HIL (FPGA emulando carga ↔ FPGA do controlador, ou planta no simulador em tempo real). Validar a malha de processamento de sinais end-to-end.
+
 Semana 14: Validar FCS-MPC em HIL. Coletar dados de transitório e regime permanente.
+
 Semana 15: Validar GPC em HIL nas mesmas condições. Coletar dataset comparável.
+
 Semana 16: Comparação sistemática FCS-MPC vs GPC em HIL. Marco: neste ponto o mestrado já tem resultado defensável mesmo se a etapa experimental falhar. Escrever a Parte 2 (resultados HIL).
+
 
 ###### Integrar FPGA ↔ conversor. Testes em malha aberta com carga resistiva simples antes de fechar a malha.
 ###### Fechar a malha com FCS-MPC em bancada, potência reduzida. Depuração de ruído, medição, sincronismo ADC.
