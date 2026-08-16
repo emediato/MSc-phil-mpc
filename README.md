@@ -16,18 +16,10 @@ Semana 4: Modelagem matemática da carga indutiva variável (RL + fcem) e do con
 Modelagem do conversor três-níveis + filtro + carga RL com fcem; discretização já pensando no ponto fixo de 12 bits alinhado ao XADC.
 Modelagem da máquina no referencial dq com parâmetros aeronáuticos. 
 
-openExample('mcb/FieldOrientedControlOfPMSMUsingHardwareInTheLoopHILExample');
-https://www.pcbway.com/blog/Engineering_Technical/Successful_PCB_grounding_with_mixed_signal_chips___Part_2__Design_to_minimize_signal_path_crosstalk.html
-https://teses.usp.br/teses/disponiveis/3/3143/tde-09012026-094839/publico/GabrielGomesdeCarvalhoMouraCorr25.pdf
-https://www.mathworks.com/help/hdlcoder/ug/field-oriented-control-of-a-permanent-magnet-synchronous-machine.html
-load_system('hdlcoderFocCurrentFixptHdl');
-open_system('hdlcoderFocCurrentFixptHdl/FOC_Current_Control')
-makehdl('hdlcoderFocCurrentFixptHdl/FOC_Current_Control');
-https://www.mathworks.com/help/hdlcoder/ug/field-oriented-control-of-a-permanent-magnet-synchronous-machine.html
-
 HW = Subsistema de aquisição — Hall isolado, divisor resistivo isolado, sensor de temperatura, condicionamento de sinais, interface FPGA/ADC. Esquemático.
 
-
+##### Redigir a Parte 1 (fundamentação P-HIL) e a metodologia.
+ 
 #### Mês 2 — Modelo e simulação offline (transição Etapa 1 → 2) - psim, simulink, PLECS
 Semana 5: Implementar em MATLAB/Simulink o modelo da planta e o emulador de carga P-HIL (medir tensão → calcular corrente em tempo real).
 
@@ -80,8 +72,9 @@ Semana 16: Comparação sistemática FCS-MPC vs GPC em HIL. Marco: neste ponto o
 ###### firmware/RTL de calibração, aquisição e proteção; escrever o plano de bring-up.
 - Bring-up — testar gate drivers, ADC e malha de medição isoladamente; malha aberta com carga resistiva em baixa tensão.
 - Primeiros testes em malha fechada (FCS) em potência reduzida. Depuração de ruído e sincronismo de ADC — é aqui que a PCB mixed-signal paga ou cobra.
-- Consolidar resultados (simulação + CHIL/PHIL + bring-up). Redigir a Parte 1 (fundamentação P-HIL) e a metodologia.
-0Buffer, revisão e reavaliação de escopo para 2027/1 (o que entra na validação em bancada plena). Reserve esta semana — algo sempre escorrega.
+- Consolidar resultados (simulação + CHIL/PHIL + bring-up).
+
+###### Buffer, revisão e reavaliação de escopo para 2027/1 (o que entra na validação em bancada plena). Reserve esta semana — algo sempre escorrega.
 
 ###### Comparação experimental final + verificação contra requisitos MIL-STD-704F / DO-160G mapeados na semana 3.
 ###### Consolidar todos os resultados (simulação, HIL, experimental). Escrever capítulo de resultados e discussão.
