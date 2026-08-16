@@ -9,10 +9,6 @@
 library ieee;
 	use ieee.std_logic_1164.all;
 
-library work;
-	use work.common_cmd_pkg.all;
-	use work.mctl_cmd_pkg.all;
-
 -------------------------------------------------------------------------------
 -- Entity
 -------------------------------------------------------------------------------
