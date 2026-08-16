@@ -1,4 +1,5 @@
 # matlab
+https://www.mathworks.com/help/mcb/gs/run-foc-pmsm-using-model-predictive-control.html
 
 https://www.mathworks.com/help/mcb/gs/foc-pmsm-using-mcb-blocks-fpga-hardware.html
 
@@ -15,6 +16,18 @@ https://www.mathworks.com/help/mcb/gs/field-oriented-control-pmsm-using-hardware
 https://www.mathworks.com/help/hdlcoder/ug/single-precision-field-oriented-control-pmsm-model.html
 
 https://www.mathworks.com/help/hdlcoder/ug/using-ip-core-generation-from-matlab.html
+
+
+
+openExample('mcb/FieldOrientedControlOfPMSMUsingHardwareInTheLoopHILExample');
+https://www.pcbway.com/blog/Engineering_Technical/Successful_PCB_grounding_with_mixed_signal_chips___Part_2__Design_to_minimize_signal_path_crosstalk.html
+https://teses.usp.br/teses/disponiveis/3/3143/tde-09012026-094839/publico/GabrielGomesdeCarvalhoMouraCorr25.pdf
+https://www.mathworks.com/help/hdlcoder/ug/field-oriented-control-of-a-permanent-magnet-synchronous-machine.html
+load_system('hdlcoderFocCurrentFixptHdl');
+open_system('hdlcoderFocCurrentFixptHdl/FOC_Current_Control')
+makehdl('hdlcoderFocCurrentFixptHdl/FOC_Current_Control');
+https://www.mathworks.com/help/hdlcoder/ug/field-oriented-control-of-a-permanent-magnet-synchronous-machine.html
+
 
 #### youtube 
 FOC https://www.youtube.com/watch?v=rhNmGbd2unQ
