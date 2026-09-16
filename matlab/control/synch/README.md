@@ -5,8 +5,6 @@
 ###### 1a etapa
 ##### Back-EMF Observer + atan2 for PMSM Sensorless Control
 
-###### 2a etapa
-##### Back-EMF Observer + SRF-PLL for PMSM Sensorless Control
 
 ## Signal Flow
 
@@ -69,10 +67,10 @@ e_\beta = v_\beta - R_s i_\beta - L_s\frac{di_\beta}{dt}
 
 where:
 
-- \(R_s\) = stator resistance
-- \(L_s\) = stator inductance
-- \(v_\alpha, v_\beta\) = stator voltages in αβ frame
-- \(i_\alpha, i_\beta\) = stator currents in αβ frame
+- R_s = stator resistance
+- L_s = stator inductance
+- v_alpha, v_beta = stator voltages in αβ frame
+- i_alpha, i_beta = stator currents in αβ frame
 
 ---
 
@@ -104,8 +102,8 @@ theta_hat = atan2(e_beta_hat,e_alpha_hat);
 
 where:
 
-- \(\hat{e}_{\alpha}\) = filtered α-axis Back-EMF
-- \(\hat{e}_{\beta}\) = filtered β-axis Back-EMF
+- ê_alpha = filtered α-axis Back-EMF
+- ê_beta = filtered β-axis Back-EMF
 
 ---
 
@@ -133,7 +131,8 @@ typically varying as:
 
 ---
 
-## Next Evolution
+###### 2a etapa
+##### Back-EMF Observer + SRF-PLL for PMSM Sensorless Control
 
 After validating the observer with atan2:
 
@@ -163,4 +162,103 @@ Back-EMF Observer
     θ̂ , ω̂
 ```
 
-which provides both estimated rotor position and estimated electrical speed for FOC or FCS-MPC applications.
+# SRF-PLL Signal Flow
+
+```text
+êα , êβ
+     │
+     ▼
+Park Transformation (using θ̂)
+     │
+     ▼
+ ┌─────────────┐
+ │             │
+ ▼             ▼
+ed            eq
+               │
+               ▼
+        Phase Error
+               │
+               ▼
+        PI Controller
+               │
+               ▼
+              Δω
+               │
+               ▼
+      ω̂ = ω0 + Δω
+               │
+               ▼
+         Integrator
+               │
+               ▼
+              θ̂
+               │
+               └─────────── Feedback ───────────┐
+                                                │
+                                                ▼
+                                        Park Transformation
+```
+
+---
+
+# Mathematical Description
+
+## Park Transformation
+
+```math
+e_d = \hat e_\alpha \cos(\hat\theta)
+    + \hat e_\beta \sin(\hat\theta)
+```
+
+```math
+e_q = -\hat e_\alpha \sin(\hat\theta)
+    + \hat e_\beta \cos(\hat\theta)
+```
+
+---
+
+## Phase Error
+
+```math
+error = e_q
+```
+
+At synchronization:
+
+```math
+e_q \rightarrow 0
+```
+
+---
+
+## PI Controller
+
+```math
+\Delta\omega =
+K_p e_q +
+K_i \int e_q dt
+```
+
+---
+
+## Estimated Speed
+
+```math
+\hat\omega = \omega_0 + \Delta\omega
+```
+
+For PMSM sensorless applications:
+
+```math
+\omega_0 = 0
+```
+
+is usually sufficient.
+
+---
+
+## VCO / Integrator
+
+```math
+\
