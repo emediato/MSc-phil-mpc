@@ -5,8 +5,7 @@
 ###### 1a etapa
 ##### Back-EMF Observer + atan2 for PMSM Sensorless Control
 
-
-## Signal Flow
+### Signal Flow
 
 ```text
 ia ib ic
@@ -162,7 +161,7 @@ Back-EMF Observer
     θ̂ , ω̂
 ```
 
-# SRF-PLL Signal Flow
+### SRF-PLL Signal Flow
 
 ```text
 êα , êβ
@@ -202,7 +201,7 @@ ed            eq
 
 ---
 
-# Mathematical Description
+#### Mathematical Description
 
 ## Park Transformation
 
