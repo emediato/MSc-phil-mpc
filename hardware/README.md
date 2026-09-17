@@ -1,5 +1,11 @@
 ## project
 
+## digital 
+
+https://hardwaredescriptions.com/field-oriented-motor-control-with-vhdl/
+
+## analog
+
 https://www.ianjohnston.com/index.php/projects/project-017-electronic-constant-current-dummy-load-v2-0
 https://www.youtube.com/watch?v=9fsf1CgnTRk
 https://www.youtube.com/watch?v=ySyOoFI5cqA
