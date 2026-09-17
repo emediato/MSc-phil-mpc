@@ -12,6 +12,8 @@ https://www.youtube.com/watch?v=ySyOoFI5cqA
 
 https://dominik-workshop.github.io/electronic-load/  - https://www.youtube.com/watch?v=NScaRQj53l0
 
+https://www.ams-publications.ee.ethz.ch/uploads/tx_ethpublications/EPE05_Tutorial_all_slides_edited_071019.pdf
+
 https://www.youtube.com/@EletroPowerLab/videos?app=desktop
 
 
