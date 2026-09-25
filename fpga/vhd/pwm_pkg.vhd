@@ -1,5 +1,4 @@
 -------------------------------------------------------------------------------
--- pwm_pkg.vhd
 -- Pacote de apoio para o modulador PWM trifasico center-aligned.
 -- Funcoes auxiliares e constante de largura dos barramentos de duty cycle.
 -------------------------------------------------------------------------------
