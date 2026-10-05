@@ -1,7 +1,7 @@
 ##### WSL config
 https://learn.microsoft.com/pt-br/windows/wsl/tutorials/wsl-vscode
 
-wsl --install -d Ubuntu-26.04
+wsl --install -d Ubuntu-26.04 
 wsl -d Ubuntu-26.04
 
 ##### docker
