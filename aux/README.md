@@ -15,6 +15,10 @@ https://www.mathworks.com/help/hdlcoder/index.html
 https://www.mathworks.com/help/hdlcoder/gs/fpga-synthesis-and-analysis-using-the-hdl-workflow-advisor.html
 https://au.mathworks.com/help/hdlcoder/ug/matlab-hdl-coder-workflow-advisor.html
 
+
+##### psim 
+http://www.lac.usp.br/~fabrizio/files/psim
+
 ##### plantUML
 
 https://plantuml.com/timing-diagram
@@ -62,6 +66,13 @@ state Operation {
 
 Operation --> Error : Critical Alarm
 Error --> Idle : Reset Command
+```
+
+##### hardware componentes
+
+DAC34SH84
+
+
 
 @enduml```
 
