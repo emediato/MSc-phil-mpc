@@ -34,3 +34,34 @@ A is 450
 A is 350
 @enduml
 ```
+
+```puml:label-other-whatever{caption=""}
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Times New Roman
+skinparam defaultFontSize 11
+
+title Fig. 1. Control flow diagram for the automated plant system.
+
+state "Idle / Standby" as Idle
+state "Initialization" as Init
+state "Operation Control" as Operation
+state "Error Handling" as Error
+
+[*] --> Idle : System Power ON
+Idle --> Init : Start Command
+Init --> Operation : Sensors OK
+Init --> Error : Fault Detected
+
+state Operation {
+    [*] --> Monitoring
+    Monitoring --> Adjusting : Error > Threshold
+    Adjusting --> Monitoring : Error within Limits
+}
+
+Operation --> Error : Critical Alarm
+Error --> Idle : Reset Command
+
+@enduml```
+
