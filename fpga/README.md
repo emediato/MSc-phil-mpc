@@ -16,7 +16,7 @@ https://www.mathworks.com/help/mcb/gs/field-oriented-control-pmsm-using-hardware
 https://www.mathworks.com/help/hdlcoder/ug/single-precision-field-oriented-control-pmsm-model.html
 
 https://www.mathworks.com/help/hdlcoder/ug/using-ip-core-generation-from-matlab.html
-
+https://www.mathworks.com/help/hdlcoder/ug/running-an-audio-filter-on-live-audio-input-using-a-zynq-board.html
 
 
 openExample('mcb/FieldOrientedControlOfPMSMUsingHardwareInTheLoopHILExample');
