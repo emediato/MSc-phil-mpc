@@ -1,0 +1,626 @@
+﻿/*********************************************************************************
+// This code is created by SimCoder Version 2024b12.251 for F2833x Hardware Target
+//
+// SimCoder is copyright by Powersim Inc., 2009-2021
+//
+// Date: November 19, 2026 12:42:59
+**********************************************************************************/
+#include	<math.h>
+#include	"PS_bios.h"
+typedef float DefaultType;
+#define	GetCurTime() PS_GetSysTimer()
+#define iif(a, b, c) ((a) ? (b) : (c))
+#define	PWM_IN_CHECK	// To lower PWM value setting time, comment out this line if PWM duty cycle values are strictly limited in the range.
+
+
+
+
+
+
+interrupt void Task();
+interrupt void Task_1();
+void Task_2();
+
+
+const Uint16 PSD_CpuClock = 150;  // MHz
+extern	DefaultType	fGblglobal_theta;
+extern	DefaultType	fGblglobal_wm;
+extern	DefaultType	fGblglobal_torque;
+extern	DefaultType	fGblId_ref;
+extern	DefaultType	fGblP72;
+extern	DefaultType	fGblIq_ref;
+extern	DefaultType	fGblI_RESET_I_D1;
+extern	DefaultType	fGbltheta;
+extern	DefaultType	fGblSUM1;
+extern	DefaultType	fGblSUMP2;
+extern	DefaultType	fGblP24;
+extern	DefaultType	fGbls1;
+extern	DefaultType	fGbls2;
+extern	DefaultType	fGbls3;
+extern	DefaultType	fGblj_opt;
+extern	DefaultType	fGblsat_count;
+extern	DefaultType	fGblS2;
+extern	DefaultType	fGblId;
+extern	DefaultType	fGblS3;
+extern	DefaultType	fGblIq;
+
+void FSetValCANAL_A();
+void FSetValCANAL_B();
+void FSetValCANAL_C();
+void FSpiCmdSend0();
+
+#define PS_AskDelayClk(delay, clkSpd) (((Uint32)(delay) + (Uint32)(500 / (clkSpd))) * 150 / 1000)
+#define Csz_SPI_QUEUE		32	// SPI queue buffer size
+#define Csz_SPI_DEVICES		1	// the number of all SPI devices
+#define Cn_CANAL_A	0	// the index of sending command in PSA_SpiSendCmd.
+#define SeqCn_CANAL_A	0	// the index of sending command in PSA_SpiInOut.
+#define Cn_CANAL_B	1	// the index of sending command in PSA_SpiSendCmd.
+#define SeqCn_CANAL_B	1	// the index of sending command in PSA_SpiInOut.
+#define Cn_CANAL_C	2	// the index of sending command in PSA_SpiSendCmd.
+#define SeqCn_CANAL_C	2	// the index of sending command in PSA_SpiInOut.
+
+Uint16 PSA_SpiSendCmd[3] = {
+	0x8000,		/* Cn_CANAL_A*/
+	0xF9000,		/* Cn_CANAL_B*/
+	0xA000 		/* Cn_CANAL_C*/
+};
+
+Uint16 PSA_SpiBBR[Csz_SPI_DEVICES * 2];
+const PST_SpiDev PSA_SpiDev[Csz_SPI_DEVICES] = {
+	{0, 20000, 2, (Uint16)PS_AskDelayClk(0, 20), &PSA_SpiBBR[0], NULL, NULL}};
+
+const PST_SpiIo PSA_SpiInOut[] = {
+	{{1, 0, 0, 0, 0}, &PSA_SpiSendCmd[Cn_CANAL_A],
+		NULL, NULL, FSetValCANAL_A, 0},
+	{{1, 0, 0, 0, 0}, &PSA_SpiSendCmd[Cn_CANAL_B],
+		NULL, NULL, FSetValCANAL_B, 0},
+	{{1, 0, 0, 0, 0}, &PSA_SpiSendCmd[Cn_CANAL_C],
+		NULL, NULL, FSetValCANAL_C, 0}};
+
+Uint16 PSA_SpiQueue[Csz_SPI_QUEUE];	// SPI queue buffer
+
+
+
+
+unsigned long	tmFunFreeRunTm, tmFun2;
+
+
+// Parameters in parameter file _ParamFile1
+#define	m	0.001
+#define	k	1000.0
+#define	fs3	10e3
+#define	fs4	10e4
+#define	fs24	20e4
+#define	fs54	50e4
+#define	fs5	10e5
+#define	fs55	5e5
+#define	fs	500000.0
+#define	Vdc	500.0
+#define	Vin	500.0
+#define	Vtri	5.0
+#define	Vtrip	5.0
+#define	Pi	3.14159265
+#define	P	6.0
+#define	Polos	6.0
+#define	Rs	0.5
+#define	Ld	0.0201
+#define	Lq	0.0201
+#define	J	0.03877
+#define	Vpk_krpm	278.926066231938
+#define	B	0.0194
+#define	Y_Vpk_krpm	278.926066231938
+#define	Y	2.6635477
+#define	lambda_m	0.5126
+#define	kpwm	0.2
+#define	kr	500.0
+#define	kiq	1.0
+#define	Kni	1.0
+#define	Kid	1.0
+#define	Kiq	1.0
+#define	Kr	500.0
+DefaultType	fGblglobal_theta = 0;
+DefaultType	fGblglobal_wm = 0;
+DefaultType	fGblglobal_torque = 0;
+DefaultType	fGblId_ref = 0;
+DefaultType	fGblP72 = 0;
+DefaultType	fGblIq_ref = 0;
+DefaultType	fGblI_RESET_I_D1 = 0;
+DefaultType	fGbltheta = 0;
+DefaultType	fGblSUM1 = 0;
+DefaultType	fGblSUMP2 = 0;
+DefaultType	fGblP24 = 0;
+DefaultType	fGbls1 = 0;
+DefaultType	fGbls2 = 0;
+DefaultType	fGbls3 = 0;
+DefaultType	fGblj_opt = 0;
+DefaultType	fGblsat_count = 0;
+DefaultType	fGblS2 = 0;
+DefaultType	fGblId = 0;
+DefaultType	fGblS3 = 0;
+DefaultType	fGblIq = 0;
+PST_Data	fGblCANAL_A;
+PST_Data	fGblCANAL_B;
+PST_Data	fGblCANAL_C;
+interrupt void Task()
+{
+	DefaultType	fNOT6, fNOT5, fNOT4, ffcs_horizonte_2_custo_norma_4, ffcs_horizonte_2_custo_norma_3;
+	DefaultType	ffcs_horizonte_2_custo_norma_2, ffcs_horizonte_2_custo_norma_1;
+	DefaultType	ffcs_horizonte_2_custo_norma, fMULT4, fSIN_R2, fMULT3, fCOS_R2;
+	DefaultType	fMULT2, fCOS_R1, fSUM32, fP7, fP6, fP5, fMULT1, fSIN_R1, fSUM31;
+	DefaultType	fP4, fP70, fP21, fSUM6, fC11, fZOH6, fADC1_3, fP3, fP62, fP17;
+	DefaultType	fSUM5, fC6, fZOH5, fADC1_2, fP2, fP61, fP16, fSUM4, fC5, fZOH4;
+	DefaultType	fADC1_5, fP56, fP60, fP15, fSUM3, fC3, fZOH26, fADC1, fP23;
+	DefaultType	fSUM7, fC13, fZOH7, fADC1_4, fC57;
+
+	PS_MaskIntr(M__INT13);
+
+	fADC1_4 = PSM_AdcGetValBySoc(3) * (1.0 * 3.0 / 4096); // Get DC value from ADC_A4.
+	fADC1 = PSM_AdcGetValBySoc(0) * (1.0 * 3.0 / 4096); // Get DC value from ADC_A0.
+	fADC1_5 = PSM_AdcGetValBySoc(4) * (1.0 * 3.0 / 4096); // Get DC value from ADC_A5.
+	fADC1_2 = PSM_AdcGetValBySoc(1) * (1.0 * 3.0 / 4096); // Get DC value from ADC_A2.
+	fADC1_3 = PSM_AdcGetValBySoc(2) * (1.0 * 3.0 / 4096); // Get DC value from ADC_A3.
+	fC57 = 0;
+#ifdef	_DEBUG
+	fGblId_ref = fC57;
+#endif
+	fZOH7 = fADC1_4;
+	fC13 = 1.5;
+	fSUM7 = fZOH7 - fC13;
+	fP23 = fSUM7 * (5.0/1.5);
+	fGblP72 = fP23 * 10;
+#ifdef	_DEBUG
+	fGblIq_ref = fGblP72;
+#endif
+	fZOH26 = fADC1;
+	fC3 = 1.5;
+	fSUM3 = fZOH26 - fC3;
+	fP15 = fSUM3 * (5.0/1.5);
+	fP60 = fP15 * 200;
+	fP56 = fP60 * (6.0/2.0);
+	{
+		static DefaultType out_A = 0, in_A = 0.0;
+		fGblI_RESET_I_D1 = out_A + 0.5/fs * (fP56 + in_A);
+		if (fGblI_RESET_I_D1 > (2.0*3.14159)) {
+			fGblI_RESET_I_D1 -= (2.0*3.14159) - 0;
+		} else if (fGblI_RESET_I_D1 < 0) {
+			fGblI_RESET_I_D1 += (2.0*3.14159) - 0;
+		}
+		out_A = fGblI_RESET_I_D1; in_A = fP56;
+	}
+#ifdef	_DEBUG
+	fGbltheta = fGblI_RESET_I_D1;
+#endif
+
+	fZOH4 = fADC1_5;
+	fC5 = 1.5;
+	fSUM4 = fZOH4 - fC5;
+	fP16 = fSUM4 * (5.0/1.5);
+	fP61 = fP16 * 10;
+	fP2 = fP61 * (2.0/3.0);
+	fZOH5 = fADC1_2;
+	fC6 = 1.5;
+	fSUM5 = fZOH5 - fC6;
+	fP17 = fSUM5 * (5.0/1.5);
+	fP62 = fP17 * 10;
+	fP3 = fP62 * ((-1)/3.0);
+	fZOH6 = fADC1_3;
+	fC11 = 1.5;
+	fSUM6 = fZOH6 - fC11;
+	fP21 = fSUM6 * (5.0/1.5);
+	fP70 = fP21 * 10;
+	fP4 = fP70 * ((-1)/3.0);
+	fSUM31 = fP2 * 1 + fP3 * 1 + fP4 * 1;
+	fSIN_R1 = sin(fGblI_RESET_I_D1);
+	fMULT1 = fSUM31 * fSIN_R1;
+	fP5 = fP61 * 0;
+	fP6 = fP62 * (1.0/sqrt(3.0));
+	fP7 = fP70 * (-1)/sqrt(3.0);
+	fSUM32 = fP5 * 1 + fP6 * 1 + fP7 * 1;
+	fCOS_R1 = cos(fGblI_RESET_I_D1);
+	fMULT2 = fSUM32 * fCOS_R1;
+	fGblSUM1 = fMULT1 - fMULT2;
+	fCOS_R2 = cos(fGblI_RESET_I_D1);
+	fMULT3 = fSUM31 * fCOS_R2;
+	fSIN_R2 = sin(fGblI_RESET_I_D1);
+	fMULT4 = fSUM32 * fSIN_R2;
+	fGblSUMP2 = fMULT3 + fMULT4;
+	fGblP24 = fP60 * (6.0/2.0);
+	{
+		#include <math.h>
+		/*
+		   (horizonte k+2)
+		   Eqs. 56-62. Transformacao do esquema:
+		       d = sin(theta)*alpha - cos(theta)*beta
+		       q = cos(theta)*alpha + sin(theta)*beta
+		       L di/dt = v - Rs*i - w*J*lambda ,  lambda = L*i + psi
+		*/
+		#define Ts              5.0e-5   /* ZOH de 100 kHz */
+		#define VDC             500.0
+		#define RS_VAL          1.3
+		#define LD_VAL          8.9e-3   /* indutancia no eixo do ima (rotor) */
+		#define LQ_VAL          17.2e-3
+		/* Vpk/krpm = 99 (pico de linha); numero de polos = 6 */
+		#define PSI_M_VAL       0.181938535489
+		/*
+		   OFFSET_THETA = theta recebido - angulo eletrico do motor.
+		   0.0:                Integrador de theta e rotor com angulo inicial zero.
+		   1.5707963267948966: Theta recebido 90 graus a frente do rotor.
+		*/
+		#define OFFSET_THETA    0.0
+		/* ================= HORIZONTE E TEMPORIZACAO ================= */
+		/* 1: o vetor escolhido em k so e aplicado em k+1 (atraso emulado aqui,
+		      como no DSP).  1 = esquema NAO tem atraso nos gatilhos.   */
+		#define ATRASO_UNITARIO 1
+		/* Referencia em k+2: 0 = constante | 1 = Lagrange, Moura (2025) Eq. 62 */
+		#define REF_LAGR        0
+		/* Velocidade em k+1: 1 = Moura (2025) Eq. 60 | 0 = constante */
+		#define W_EXTRAP        1
+		/* ================= FUNCAO CUSTO ================= */
+		#define LAMBDA_I        1.0
+		#define LAMBDA_U        0.01      /* peso do termo de comutacao (norma L1) */
+		/* ================= LIMITE DE CORRENTE ================= */
+		/* 0: penalizacao suave; 1: rejeicao dos vetores inviaveis (Eq. 61) */
+		#define BARREIRA_DURA   0
+		#define LAMBDA_IS       0.0
+		#define IS_MAX_VAL      15.0     /* deve ser MAIOR que a maior referencia */
+		#define IS_MAX_SQ       (IS_MAX_VAL * IS_MAX_VAL)
+		#define N_VET           7
+		/* ================= ESTADOS DO INVERSOR ================= */
+		/* Colunas: 000, 100, 110, 010, 011, 001, 101, 111 */
+		static const int Svec[3][8] = {
+		    {0, 1, 1, 0, 0, 0, 1, 1},
+		    {0, 0, 1, 1, 1, 0, 0, 1},
+		    {0, 0, 0, 0, 1, 1, 1, 1}
+		};
+		/* ================= MEMORIAS ================= */
+		static double VA[8];
+		static double VB[8];
+		static double psi_d = 0.0;
+		static double psi_q = 0.0;
+		static double L11 = 0.0;
+		static double L12 = 0.0;
+		static double L22 = 0.0;
+		static double G11 = 0.0;
+		static double G12 = 0.0;
+		static double G22 = 0.0;
+		static double omega_prev = 0.0;
+		static double idref_h[3];
+		static double iqref_h[3];
+		static int j_ant = 0;            /* vetor aplicado em [k, k+1] */
+		static int init_flag = 0;
+		/* ================= INPUTS ================= */
+		double id_ref  = fC57;
+		double iq_ref  = fGblP72;
+		double id      = fGblS2;
+		double iq      = fGblS3;
+		double theta   = fGblI_RESET_I_D1;
+		double omega_e = fGblP24;             /* ganho de pares de polos ja no esquema */
+		/* ================= INICIALIZACAO (uma vez) ================= */
+		if (init_flag == 0) {
+		    double sO = sin(OFFSET_THETA);
+		    double cO = cos(OFFSET_THETA);
+		    double det = LD_VAL * LQ_VAL;
+		    int ii;
+		    /* Eixo do ima no esquema: n = (sO, cO) */
+		    psi_d = PSI_M_VAL * sO;
+		    psi_q = PSI_M_VAL * cO;
+		    /* L = Lq*I + (Ld - Lq)*n*n^T ;  det(L) = Ld*Lq */
+		    L11 = LQ_VAL + (LD_VAL - LQ_VAL) * sO * sO;
+		    L22 = LQ_VAL + (LD_VAL - LQ_VAL) * cO * cO;
+		    L12 = (LD_VAL - LQ_VAL) * sO * cO;
+		    G11 =  L22 / det;
+		    G22 =  L11 / det;
+		    G12 = -L12 / det;
+		    /* Tensoes alfa-beta dos 8 estados */
+		    for (ii = 0; ii < 8; ii++) {
+		        VA[ii] = VDC * 0.6666666666666666 *
+		                 ((double)Svec[0][ii] - 0.5*(double)Svec[1][ii]
+		                  - 0.5*(double)Svec[2][ii]);
+		        VB[ii] = VDC * 0.5773502691896258 *
+		                 ((double)Svec[1][ii] - (double)Svec[2][ii]);
+		    }
+		    idref_h[0] = id_ref; idref_h[1] = id_ref; idref_h[2] = id_ref;
+		    iqref_h[0] = iq_ref; iqref_h[1] = iq_ref; iqref_h[2] = iq_ref;
+		    omega_prev = omega_e;
+		    j_ant = 0;
+		    init_flag = 1;
+		}
+		/* ================= (1) EXTRAPOLACOES ================= */
+		#if W_EXTRAP
+		double omega_k1 = 2.0 * omega_e - omega_prev;      /* Eq. (60) */
+		#else
+		double omega_k1 = omega_e;
+		#endif
+		double idref_k2;
+		double iqref_k2;
+		#if REF_LAGR
+		idref_h[2] = idref_h[1]; idref_h[1] = idref_h[0]; idref_h[0] = id_ref;
+		iqref_h[2] = iqref_h[1]; iqref_h[1] = iqref_h[0]; iqref_h[0] = iq_ref;
+		idref_k2 = 3.0*idref_h[0] - 3.0*idref_h[1] + idref_h[2];   /* Eq. (62) */
+		iqref_k2 = 3.0*iqref_h[0] - 3.0*iqref_h[1] + iqref_h[2];
+		#else
+		idref_k2 = id_ref;
+		iqref_k2 = iq_ref;
+		#endif
+		/* ================= (2) PREDICAO k+1 (Eqs. 58-59) ================= */
+		double c = cos(theta);
+		double s = sin(theta);
+		/* Vetor aplicado em [k, k+1]: escolhido na amostra anterior */
+		double vd_k = s * VA[j_ant] - c * VB[j_ant];
+		double vq_k = c * VA[j_ant] + s * VB[j_ant];
+		double lam_d = L11*id + L12*iq + psi_d;
+		double lam_q = L12*id + L22*iq + psi_q;
+		double ud = vd_k - RS_VAL*id + omega_e*lam_q;
+		double uq = vq_k - RS_VAL*iq - omega_e*lam_d;
+		double id1 = id + Ts * (G11*ud + G12*uq);
+		double iq1 = iq + Ts * (G12*ud + G22*uq);
+		/* Parcela de k+1 -> k+2 que independe do candidato */
+		double lam_d1 = L11*id1 + L12*iq1 + psi_d;
+		double lam_q1 = L12*id1 + L22*iq1 + psi_q;
+		double ud_livre = -RS_VAL*id1 + omega_k1*lam_q1;
+		double uq_livre = -RS_VAL*iq1 - omega_k1*lam_d1;
+		/* Angulo em k+1: theta + omega*Ts (rotacao, sem novo sin/cos) */
+		double dth = omega_e * Ts;
+		double cdt = 1.0 - 0.5*dth*dth;
+		double c1 = c*cdt - s*dth;
+		double s1 = s*cdt + c*dth;
+		/* ================= OTIMIZACAO ================= */
+		double g_min = 1.0e30;
+		double iq2_opt = 0.0;
+		int j_opt = 0;
+		int encontrou_viavel = 0;
+		double is_sq_min = 1.0e30;
+		double g_fallback = 1.0e30;
+		double iq2_fallback = 0.0;
+		int j_fallback = 0;
+		int jj;
+		/* ================= VARREDURA DOS 7 ESTADOS (V0..V6) ================= */
+		for (jj = 0; jj < N_VET; jj++) {
+		    /* aplicado em [k+1, k+2], projetado em theta(k+1) */
+		    double vd1 = s1 * VA[jj] - c1 * VB[jj];
+		    double vq1 = c1 * VA[jj] + s1 * VB[jj];
+		    /* Predicao k+2 (Eqs. 56-57) */
+		    double id2 = id1 + Ts * (G11*(ud_livre + vd1) + G12*(uq_livre + vq1));
+		    double iq2 = iq1 + Ts * (G12*(ud_livre + vd1) + G22*(uq_livre + vq1));
+		    double err_d = idref_k2 - id2;
+		    double err_q = iqref_k2 - iq2;
+		    /* Erros absolutos de corrente em k+2 */
+		    double cost_i = LAMBDA_I * (fabs(err_d) + fabs(err_q));
+		    /* Comutacoes entre o vetor aplicado em k e o candidato de k+1 (erro absoluto / L1) */
+		    int n_sw = (Svec[0][jj] != Svec[0][j_ant])
+		             + (Svec[1][jj] != Svec[1][j_ant])
+		             + (Svec[2][jj] != Svec[2][j_ant]);
+		    double cost_u = LAMBDA_U * (double)n_sw;
+		    double is_sq = id2 * id2 + iq2 * iq2;
+		    double cost_is = 0.0;
+		    double gc;
+		    #if !BARREIRA_DURA
+		        if (is_sq > IS_MAX_SQ) {
+		            double over = sqrt(is_sq) - IS_MAX_VAL;
+		            cost_is = LAMBDA_IS * over * over;
+		        }
+		    #endif
+		    gc = cost_i + cost_u + cost_is;
+		    /* Candidato de menor corrente prevista (fallback) */
+		    if ((is_sq < is_sq_min) ||
+		        ((is_sq == is_sq_min) && (gc < g_fallback))) {
+		        is_sq_min = is_sq;
+		        g_fallback = gc;
+		        j_fallback = jj;
+		        iq2_fallback = iq2;
+		    }
+		    #if BARREIRA_DURA
+		        if (is_sq > IS_MAX_SQ) {
+		            continue;
+		        }
+		    #endif
+		    if ((!encontrou_viavel) || (gc < g_min)) {
+		        encontrou_viavel = 1;
+		        g_min = gc;
+		        j_opt = jj;
+		        iq2_opt = iq2;
+		    }
+		}
+		if (!encontrou_viavel) {
+		    j_opt = j_fallback;
+		    iq2_opt = iq2_fallback;
+		}
+		/* ================= SAIDAS ================= */
+		#if ATRASO_UNITARIO
+		/* Aplica agora o vetor escolhido na amostra anterior */
+		ffcs_horizonte_2_custo_norma = (double)Svec[0][j_ant];
+		ffcs_horizonte_2_custo_norma_1 = (double)Svec[1][j_ant];
+		ffcs_horizonte_2_custo_norma_2 = (double)Svec[2][j_ant];
+		#else
+		/* O atraso unitario esta no esquema */
+		ffcs_horizonte_2_custo_norma = (double)Svec[0][j_opt];
+		ffcs_horizonte_2_custo_norma_1 = (double)Svec[1][j_opt];
+		ffcs_horizonte_2_custo_norma_2 = (double)Svec[2][j_opt];
+		#endif
+		ffcs_horizonte_2_custo_norma_3 = (double)j_opt;      /* vetor escolhido para [k+1, k+2] */
+		ffcs_horizonte_2_custo_norma_4 = iq2_opt;            /* iq previsto em k+2 */
+		/* ================= MEMORIAS ================= */
+		j_ant = j_opt;
+		omega_prev = omega_e;
+	}
+#ifdef	_DEBUG
+	fGbls1 = ffcs_horizonte_2_custo_norma;
+#endif
+
+#ifdef	_DEBUG
+	fGbls2 = ffcs_horizonte_2_custo_norma_1;
+#endif
+
+#ifdef	_DEBUG
+	fGbls3 = ffcs_horizonte_2_custo_norma_2;
+#endif
+
+#ifdef	_DEBUG
+	fGblj_opt = ffcs_horizonte_2_custo_norma_3;
+#endif
+
+#ifdef	_DEBUG
+	fGblsat_count = ffcs_horizonte_2_custo_norma_4;
+#endif
+
+	fNOT4 = (ffcs_horizonte_2_custo_norma <= 0.3) ? 1 : 0;
+	fNOT5 = (ffcs_horizonte_2_custo_norma_1 <= 0.3) ? 1 : 0;
+	fNOT6 = (ffcs_horizonte_2_custo_norma_2 <= 0.3) ? 1 : 0;
+	fGblglobal_theta = fGblI_RESET_I_D1;
+	fGblglobal_wm = fGblP24;
+	fGblglobal_torque = fGblP72;
+	(ffcs_horizonte_2_custo_norma == 0) ? PS_ClearDigitOutBitA((Uint32)1 << 0) : PS_SetDigitOutBitA((Uint32)1 << 0);
+	(fNOT4 == 0) ? PS_ClearDigitOutBitA((Uint32)1 << 1) : PS_SetDigitOutBitA((Uint32)1 << 1);
+	(ffcs_horizonte_2_custo_norma_1 == 0) ? PS_ClearDigitOutBitA((Uint32)1 << 2) : PS_SetDigitOutBitA((Uint32)1 << 2);
+	(fNOT5 == 0) ? PS_ClearDigitOutBitA((Uint32)1 << 3) : PS_SetDigitOutBitA((Uint32)1 << 3);
+	(ffcs_horizonte_2_custo_norma_2 == 0) ? PS_ClearDigitOutBitA((Uint32)1 << 4) : PS_SetDigitOutBitA((Uint32)1 << 4);
+	(fNOT6 == 0) ? PS_ClearDigitOutBitA((Uint32)1 << 5) : PS_SetDigitOutBitA((Uint32)1 << 5);
+	PS_ExitTimer1Intr();
+}
+
+interrupt void Task_1()
+{
+
+	PS_MaskIntr(M__INT14);
+
+	{
+		static	DefaultType fOutVal = 0.0;
+		const DefaultType b0 = (1.0*1.0)/100.0E3/(1.0/(2*3.14159*10.0E3)+1.0/100.0E3);
+		const DefaultType a1 = -1.0/(2*3.14159*10.0E3)/(1.0/(2*3.14159*10.0E3)+1.0/100.0E3);
+		fGblS2 = b0 * fGblSUM1 - a1 * fOutVal;
+		fOutVal = fGblS2;
+	}
+#ifdef	_DEBUG
+	fGblId = fGblS2;
+#endif
+
+	{
+		static	DefaultType fOutVal = 0.0;
+		const DefaultType b0 = (1.0*1.0)/100.0E3/(1.0/(2*3.14159*10.0E3)+1.0/100.0E3);
+		const DefaultType a1 = -1.0/(2*3.14159*10.0E3)/(1.0/(2*3.14159*10.0E3)+1.0/100.0E3);
+		fGblS3 = b0 * fGblSUMP2 - a1 * fOutVal;
+		fOutVal = fGblS3;
+	}
+#ifdef	_DEBUG
+	fGblIq = fGblS3;
+#endif
+
+	PS_ExitTimer2Intr();
+}
+
+void Task_2()
+{
+	DefaultType	fSUMP18, fC14, fP10, fZOH3, fSUMP16, fC1, fP1, fZOH1, fSUMP17;
+	DefaultType	fC2, fP9, fZOH2;
+
+
+	fZOH2 = fGblP72;
+	fP9 = fZOH2 * (1.0/5.0);
+	fC2 = 0;
+	fSUMP17 = fP9 + fC2;
+	{
+		int32 _val = (int32)(fSUMP17 * (1 * 4096 / 3.3));
+		_val = (_val < 0) ? 0 : ((_val >= 4096) ? 4096 - 1 : (Uint32)_val);
+		fGblCANAL_A.dataInt32 = (Uint32)_val;
+	}
+	fZOH1 = fGblP24;
+	fP1 = fZOH1;
+	fC1 = 1.5;
+	fSUMP16 = fP1 + fC1;
+	{
+		int32 _val = (int32)(fSUMP16 * (1 * 4096 / 3.3));
+		_val = (_val < 0) ? 0 : ((_val >= 4096) ? 4096 - 1 : (Uint32)_val);
+		fGblCANAL_B.dataInt32 = (Uint32)_val;
+	}
+	fZOH3 = fGblI_RESET_I_D1;
+	fP10 = fZOH3;
+	fC14 = 1.5;
+	fSUMP18 = fP10 + fC14;
+	{
+		int32 _val = (int32)(fSUMP18 * (1 * 4096 / 3.3));
+		_val = (_val < 0) ? 0 : ((_val >= 4096) ? 4096 - 1 : (Uint32)_val);
+		fGblCANAL_C.dataInt32 = (Uint32)_val;
+	}
+}
+
+void FSetValCANAL_A()
+{
+	/* CANAL_A DataBits = 12 */
+	PSA_SpiSendCmd[Cn_CANAL_A] &= ~0xfff;
+	PSA_SpiSendCmd[Cn_CANAL_A] |= fGblCANAL_A.dataInt32 & 0xfff;
+}
+void FSetValCANAL_B()
+{
+	/* CANAL_B DataBits = 12 */
+	PSA_SpiSendCmd[Cn_CANAL_B] &= ~0xfff;
+	PSA_SpiSendCmd[Cn_CANAL_B] |= fGblCANAL_B.dataInt32 & 0xfff;
+}
+void FSetValCANAL_C()
+{
+	/* CANAL_C DataBits = 12 */
+	PSA_SpiSendCmd[Cn_CANAL_C] &= ~0xfff;
+	PSA_SpiSendCmd[Cn_CANAL_C] |= fGblCANAL_C.dataInt32 & 0xfff;
+}
+void FSpiCmdSend0()
+{
+	// send SPI command
+	PS_SpiPutQue(SeqCn_CANAL_A);
+	PS_SpiPutQue(SeqCn_CANAL_B);
+	PS_SpiPutQue(SeqCn_CANAL_C);
+}
+
+
+void Initialize(void)
+{
+	PS_SysInit(30, 10);
+	PS_InitTimer(0, 0);
+
+	// Set initial states for those GPIO/AIO output ports.
+	PS_ClearDigitOutBitA((Uint32)1 << 0);	// Reset GPIO0
+	PS_ClearDigitOutBitA((Uint32)1 << 1);	// Reset GPIO1
+	PS_ClearDigitOutBitA((Uint32)1 << 2);	// Reset GPIO2
+	PS_ClearDigitOutBitA((Uint32)1 << 3);	// Reset GPIO3
+	PS_ClearDigitOutBitA((Uint32)1 << 4);	// Reset GPIO4
+	PS_ClearDigitOutBitA((Uint32)1 << 5);	// Reset GPIO5
+	PS_ResetAdcConvSeq();
+	PS_SetAdcConvSeq(eAdcCascade, 0, 0);	// ADC-A0
+	PS_SetAdcConvSeq(eAdcCascade, 2, 1);	// ADC-A2
+	PS_SetAdcConvSeq(eAdcCascade, 3, 2);	// ADC-A3
+	PS_SetAdcConvSeq(eAdcCascade, 4, 3);	// ADC-A4
+	PS_SetAdcConvSeq(eAdcCascade, 5, 4);	// ADC-A5
+	PS_AdcInit(0, !0);
+
+	PS_InitDigitOut(0);
+	PS_InitDigitOut(1);
+	PS_InitDigitOut(2);
+	PS_InitDigitOut(3);
+	PS_InitDigitOut(4);
+	PS_InitDigitOut(5);
+
+	PS_SpiInitBBR(PSA_SpiDev, Csz_SPI_DEVICES);
+	PS_SpiInit(PSA_SpiInOut, PSA_SpiQueue, Csz_SPI_QUEUE, 1);
+
+	PS_InitTimer(1,300L);
+	PS_SetTimerIntrVector(1, Task);
+	PS_InitTimer(2, 1500L);
+	PS_SetTimerIntrVector(2, Task_1);
+	PS_StartStopPwmClock(3);	// start Timer1 and Timer2
+	tmFun2 = GetCurTime();
+}
+
+
+void main()
+{
+	Initialize();
+	PS_EnableIntr();   // Enable Global interrupt INTM
+	PS_EnableDbgm();
+	for (;;) {
+		tmFunFreeRunTm = GetCurTime();
+		PS_SpiTransmitCheck();
+		if (tmFunFreeRunTm - tmFun2 > 7500) {
+			Task_2();
+			tmFun2 += 7500;
+		}
+	}
+}
+
