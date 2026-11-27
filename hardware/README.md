@@ -40,7 +40,25 @@ EVAL-M1-IM818-A — Placa de avaliação da Infineon baseada em módulo inversor
 IGCM20F60GA — Módulo IPM (Intelligent Power Module) CIPOS™ Mini da Infineon.
 
 
-IGCM20F60GA
+## estrutura interna de um módulo semicondutor
+como o dispositivo é feito determina as formas de falha dele
+fator de potencia atraso - IM - usam-se pouco diodo
+muita potencia reativa - STATCOM - módulo maior usam mais diodos - maior volume
+
+perdas e estresse térmico em um IGBT
+
+## falhas
+motores - vibracao, desgaste do motor
+monitorar capacitancia e indutancia
+melhorar solda no chip
+
+
+Zeng, C. Herold, T. Methfessel, M. Schäfer, O. Schilling, and J. Lutz. Experimental Investigation of Linear Cumulative Damage Theory with Power Cycling Test. IEEE Transactions on Power Electronics, 34 (5):4722–4728, May 2019. - Chemnitz
+F ianuzzo. PhD thesis
+
+Impact of the missions profile length on lifetime prediction of PV inverters. Cupertino et al. Microelectronics Reliability 2019. Monte Carlo para testar diferentes perfils aleatorio para predizer falhas.
+
+## IGCM20F60GA
 
 Dual In-Line Intelligent Power Module
 3Φ -bridge 600V / 20A
