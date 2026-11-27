@@ -33,121 +33,34 @@ SETTINGS_DIR = get_settings_dir_path()
                 <hierarchy_position>1</hierarchy_position>
                 <working_mode>windowed</working_mode>
                 <widget_settings>
-                    <x>256</x>
-                    <y>16</y>
+                    <x>376</x>
+                    <y>224</y>
                     <width>120</width>
                     <height>120</height>
                     <appearance><![CDATA[Flat]]></appearance>
                     <state>Scope</state>
-                    <layout>None</layout>
+                    <layout></layout>
                     <presets>
-                        <active_capture_preset><![CDATA[Default]]></active_capture_preset>
-                        <active_scope_preset><![CDATA[Default]]></active_scope_preset>
+                        <active_capture_preset>Default</active_capture_preset>
+                        <active_scope_preset>Default</active_scope_preset>
                         <capture name="Default">
-                            <time_interval>0.5</time_interval>
-                            <sample_rate>20000.0</sample_rate>
+                            <time_interval>0.01</time_interval>
+                            <sample_rate>2000000.0</sample_rate>
                             <background_color>white</background_color>
-                            <layout>Grid</layout>
+                            <layout>Vertical</layout>
                             <legend>True</legend>
                             <analog_signals>
-                            <analog>
-                            <channel>0</channel>
-                            <name><![CDATA[w]]></name>
-                            <is_locked>False</is_locked>
-                            <vertical_scale>Auto Range</vertical_scale>
-                            <vertical_offset>0.0</vertical_offset>
-                            <coupling>False</coupling>
-                            <viewports>
-                                
-                                <num_viewport>1</num_viewport>
-                                
-                           </viewports>
-                        </analog>
-                            <analog>
-                            <channel>1</channel>
-                            <name><![CDATA[psi_qs]]></name>
-                            <is_locked>False</is_locked>
-                            <vertical_scale>Auto</vertical_scale>
-                            <vertical_offset>0.0</vertical_offset>
-                            <coupling>False</coupling>
-                            <viewports>
-                                
-                           </viewports>
-                        </analog>
-                            <analog>
-                            <channel>2</channel>
-                            <name><![CDATA[theta]]></name>
-                            <is_locked>False</is_locked>
-                            <vertical_scale>Auto</vertical_scale>
-                            <vertical_offset>0.0</vertical_offset>
-                            <coupling>True</coupling>
-                            <viewports>
-                                
-                                <num_viewport>3</num_viewport>
-                                
-                           </viewports>
-                        </analog>
-                            <analog>
-                            <channel>3</channel>
-                            <name><![CDATA[Ia]]></name>
-                            <is_locked>False</is_locked>
-                            <vertical_scale>10</vertical_scale>
-                            <vertical_offset>0.0</vertical_offset>
-                            <coupling>False</coupling>
-                            <viewports>
-                                
-                                <num_viewport>2</num_viewport>
-                                
-                           </viewports>
-                        </analog>
-                            <analog>
-                            <channel>4</channel>
-                            <name><![CDATA[Ib]]></name>
-                            <is_locked>False</is_locked>
-                            <vertical_scale>10</vertical_scale>
-                            <vertical_offset>0.0</vertical_offset>
-                            <coupling>False</coupling>
-                            <viewports>
-                                
-                                <num_viewport>2</num_viewport>
-                                
-                           </viewports>
-                        </analog>
-                            <analog>
-                            <channel>5</channel>
-                            <name><![CDATA[Ic]]></name>
-                            <is_locked>False</is_locked>
-                            <vertical_scale>10</vertical_scale>
-                            <vertical_offset>0.0</vertical_offset>
-                            <coupling>False</coupling>
-                            <viewports>
-                                
-                                <num_viewport>2</num_viewport>
-                                
-                           </viewports>
-                        </analog>
-                            <analog>
-                            <channel>6</channel>
-                            <name><![CDATA[nm]]></name>
-                            <is_locked>False</is_locked>
-                            <vertical_scale>Auto</vertical_scale>
-                            <vertical_offset>0.0</vertical_offset>
-                            <coupling>False</coupling>
-                            <viewports>
-                                
-                           </viewports>
-                        </analog>
                             </analog_signals>
                             <digital_signals>
                             </digital_signals>
                             <trigger>
-                                <device>0</device>
-                                <is_force>True</is_force>
+                                <device>-1</device>
+                                <is_force>False</is_force>
                                 <type>Analog</type>
-                                <source>theta</source>
+                                <source>None</source>
                                 <edge>Rising edge</edge>
                                 <treshold>0.0</treshold>
-                                <offset>50.0</offset>
+                                <offset>0.0</offset>
                                 <useFirstTrigger>False</useFirstTrigger>
                             </trigger>
                             <plotting_options in_use="False">
@@ -159,16 +72,16 @@ SETTINGS_DIR = get_settings_dir_path()
                             <background_color>white</background_color>
                             <layout>Grid</layout>
                             <legend>True</legend>
-                            <show_viewports>4</show_viewports>
+                            <show_viewports>2</show_viewports>
                             <decimation>6</decimation>
                             <time_base>0.005</time_base>
                             <analog_signals>
                             <analog>
                             <channel>0</channel>
-                            <name><![CDATA[w]]></name>
+                            <name>w</name>
                             <is_locked>False</is_locked>
                             <vertical_scale>Auto</vertical_scale>
-                            <vertical_offset>0.0</vertical_offset>
+                            <vertical_offset>0</vertical_offset>
                             <coupling>False</coupling>
                             <viewports>
                                 
@@ -178,129 +91,40 @@ SETTINGS_DIR = get_settings_dir_path()
                         </analog>
                             <analog>
                             <channel>1</channel>
-                            <name><![CDATA[psi_als]]></name>
+                            <name>Ia</name>
                             <is_locked>False</is_locked>
                             <vertical_scale>Auto</vertical_scale>
-                            <vertical_offset>0.0</vertical_offset>
+                            <vertical_offset>0</vertical_offset>
                             <coupling>False</coupling>
                             <viewports>
+                                
+                                <num_viewport>2</num_viewport>
                                 
                            </viewports>
                         </analog>
                             <analog>
                             <channel>2</channel>
-                            <name><![CDATA[theta]]></name>
+                            <name>Ib</name>
                             <is_locked>False</is_locked>
                             <vertical_scale>Auto</vertical_scale>
-                            <vertical_offset>0.0</vertical_offset>
-                            <coupling>True</coupling>
+                            <vertical_offset>0</vertical_offset>
+                            <coupling>False</coupling>
                             <viewports>
                                 
-                                <num_viewport>3</num_viewport>
+                                <num_viewport>2</num_viewport>
                                 
                            </viewports>
                         </analog>
                             <analog>
                             <channel>3</channel>
-                            <name><![CDATA[Ia]]></name>
-                            <is_locked>False</is_locked>
-                            <vertical_scale>Auto</vertical_scale>
-                            <vertical_offset>0.0</vertical_offset>
-                            <coupling>False</coupling>
-                            <viewports>
-                                
-                                <num_viewport>2</num_viewport>
-                                
-                           </viewports>
-                        </analog>
-                            <analog>
-                            <channel>4</channel>
-                            <name><![CDATA[Ib]]></name>
-                            <is_locked>False</is_locked>
-                            <vertical_scale>Auto</vertical_scale>
-                            <vertical_offset>0.0</vertical_offset>
-                            <coupling>False</coupling>
-                            <viewports>
-                                
-                                <num_viewport>2</num_viewport>
-                                
-                           </viewports>
-                        </analog>
-                            <analog>
-                            <channel>5</channel>
-                            <name><![CDATA[Ic]]></name>
-                            <is_locked>False</is_locked>
-                            <vertical_scale>Auto</vertical_scale>
-                            <vertical_offset>0.0</vertical_offset>
-                            <coupling>False</coupling>
-                            <viewports>
-                                
-                                <num_viewport>2</num_viewport>
-                                
-                           </viewports>
-                        </analog>
-                            <analog>
-                            <channel>6</channel>
-                            <name><![CDATA[vdc_out]]></name>
-                            <is_locked>False</is_locked>
-                            <vertical_scale>Auto</vertical_scale>
-                            <vertical_offset>0.0</vertical_offset>
-                            <coupling>False</coupling>
-                            <viewports>
-                                
-                                <num_viewport>1</num_viewport>
-                                
-                           </viewports>
-                        </analog>
-                            <analog>
-                            <channel>7</channel>
-                            <name><![CDATA[nm]]></name>
-                            <is_locked>False</is_locked>
-                            <vertical_scale>Auto</vertical_scale>
-                            <vertical_offset>0.0</vertical_offset>
-                            <coupling>False</coupling>
-                            <viewports>
-                                
-                                <num_viewport>1</num_viewport>
-                                
-                           </viewports>
-                        </analog>
-                            <analog>
-                            <channel>8</channel>
-                            <name><![CDATA[Three Phase Inverter.IGBT Leg1.I_S1]]></name>
+                            <name>Ic</name>
                             <is_locked>False</is_locked>
                             <vertical_scale>Auto</vertical_scale>
                             <vertical_offset>0</vertical_offset>
                             <coupling>False</coupling>
                             <viewports>
                                 
-                                <num_viewport>4</num_viewport>
-                                
-                           </viewports>
-                        </analog>
-                            <analog>
-                            <channel>9</channel>
-                            <name><![CDATA[Three Phase Inverter.IGBT Leg2.I_S1]]></name>
-                            <is_locked>False</is_locked>
-                            <vertical_scale>Auto</vertical_scale>
-                            <vertical_offset>0</vertical_offset>
-                            <coupling>False</coupling>
-                            <viewports>
-                                
-                                <num_viewport>4</num_viewport>
-                                
-                           </viewports>
-                        </analog>
-                            <analog>
-                            <channel>10</channel>
-                            <name><![CDATA[Three Phase Inverter.IGBT Leg3.I_S2]]></name>
-                            <is_locked>False</is_locked>
-                            <vertical_scale>Auto</vertical_scale>
-                            <vertical_offset>0</vertical_offset>
-                            <coupling>False</coupling>
-                            <viewports>
-                                
-                                <num_viewport>4</num_viewport>
+                                <num_viewport>2</num_viewport>
                                 
                            </viewports>
                         </analog>
@@ -311,7 +135,7 @@ SETTINGS_DIR = get_settings_dir_path()
                                 <device>0</device>
                                 <is_force>False</is_force>
                                 <type>Analog</type>
-                                <source>theta</source>
+                                <source>w</source>
                                 <edge>Rising edge</edge>
                                 <treshold>0.0</treshold>
                                 <offset>50.0</offset>
@@ -320,108 +144,21 @@ SETTINGS_DIR = get_settings_dir_path()
                         </scope>
                         </presets>
                     <capture>
-                        <time_interval>0.5</time_interval>
-                        <sample_rate>20000.0</sample_rate>
+                        <time_interval>0.01</time_interval>
+                        <sample_rate>2000000.0</sample_rate>
                         <background_color>white</background_color>
-                        <layout>Grid</layout>
+                        <layout>Vertical</layout>
                         <legend>True</legend>
                         <trigger>
                             <type>Analog</type>
-                            <source>theta</source>
+                            <source>None</source>
                             <edge>Rising edge</edge>
                             <treshold>0.0</treshold>
-                            <offset>50.0</offset>
+                            <offset>0.0</offset>
                             <useFirstTrigger>False</useFirstTrigger>
                         </trigger>
 
                         <analog_signals>
-                            <analog>
-                            <channel>0</channel>
-                            <name><![CDATA[w]]></name>
-                            <is_locked>False</is_locked>
-                            <vertical_scale>Auto Range</vertical_scale>
-                            <vertical_offset>0.0</vertical_offset>
-                            <coupling>False</coupling>
-                            <viewports>
-                                
-                                <num_viewport>1</num_viewport>
-                                
-                           </viewports>
-                        </analog>
-                            <analog>
-                            <channel>1</channel>
-                            <name><![CDATA[psi_qs]]></name>
-                            <is_locked>False</is_locked>
-                            <vertical_scale>Auto</vertical_scale>
-                            <vertical_offset>0.0</vertical_offset>
-                            <coupling>False</coupling>
-                            <viewports>
-                                
-                           </viewports>
-                        </analog>
-                            <analog>
-                            <channel>2</channel>
-                            <name><![CDATA[theta]]></name>
-                            <is_locked>False</is_locked>
-                            <vertical_scale>Auto</vertical_scale>
-                            <vertical_offset>0.0</vertical_offset>
-                            <coupling>True</coupling>
-                            <viewports>
-                                
-                                <num_viewport>3</num_viewport>
-                                
-                           </viewports>
-                        </analog>
-                            <analog>
-                            <channel>3</channel>
-                            <name><![CDATA[Ia]]></name>
-                            <is_locked>False</is_locked>
-                            <vertical_scale>10</vertical_scale>
-                            <vertical_offset>0.0</vertical_offset>
-                            <coupling>False</coupling>
-                            <viewports>
-                                
-                                <num_viewport>2</num_viewport>
-                                
-                           </viewports>
-                        </analog>
-                            <analog>
-                            <channel>4</channel>
-                            <name><![CDATA[Ib]]></name>
-                            <is_locked>False</is_locked>
-                            <vertical_scale>10</vertical_scale>
-                            <vertical_offset>0.0</vertical_offset>
-                            <coupling>False</coupling>
-                            <viewports>
-                                
-                                <num_viewport>2</num_viewport>
-                                
-                           </viewports>
-                        </analog>
-                            <analog>
-                            <channel>5</channel>
-                            <name><![CDATA[Ic]]></name>
-                            <is_locked>False</is_locked>
-                            <vertical_scale>10</vertical_scale>
-                            <vertical_offset>0.0</vertical_offset>
-                            <coupling>False</coupling>
-                            <viewports>
-                                
-                                <num_viewport>2</num_viewport>
-                                
-                           </viewports>
-                        </analog>
-                            <analog>
-                            <channel>6</channel>
-                            <name><![CDATA[nm]]></name>
-                            <is_locked>False</is_locked>
-                            <vertical_scale>Auto</vertical_scale>
-                            <vertical_offset>0.0</vertical_offset>
-                            <coupling>False</coupling>
-                            <viewports>
-                                
-                           </viewports>
-                        </analog>
                             </analog_signals>
 
                          <digital_signals>
@@ -437,7 +174,7 @@ SETTINGS_DIR = get_settings_dir_path()
                         <trigger>
                             <mode>Auto</mode>
                             <type>Analog</type>
-                            <source>theta</source>
+                            <source>w</source>
                             <edge>Rising edge</edge>
                             <treshold>0.0</treshold>
                             <offset>50.0</offset>
@@ -446,10 +183,10 @@ SETTINGS_DIR = get_settings_dir_path()
                          <analog_signals>
                             <analog>
                             <channel>0</channel>
-                            <name><![CDATA[w]]></name>
+                            <name>w</name>
                             <is_locked>False</is_locked>
                             <vertical_scale>Auto</vertical_scale>
-                            <vertical_offset>0.0</vertical_offset>
+                            <vertical_offset>0</vertical_offset>
                             <coupling>False</coupling>
                             <viewports>
                                 
@@ -459,129 +196,40 @@ SETTINGS_DIR = get_settings_dir_path()
                         </analog>
                             <analog>
                             <channel>1</channel>
-                            <name><![CDATA[psi_als]]></name>
+                            <name>Ia</name>
                             <is_locked>False</is_locked>
                             <vertical_scale>Auto</vertical_scale>
-                            <vertical_offset>0.0</vertical_offset>
+                            <vertical_offset>0</vertical_offset>
                             <coupling>False</coupling>
                             <viewports>
+                                
+                                <num_viewport>2</num_viewport>
                                 
                            </viewports>
                         </analog>
                             <analog>
                             <channel>2</channel>
-                            <name><![CDATA[theta]]></name>
+                            <name>Ib</name>
                             <is_locked>False</is_locked>
                             <vertical_scale>Auto</vertical_scale>
-                            <vertical_offset>0.0</vertical_offset>
-                            <coupling>True</coupling>
+                            <vertical_offset>0</vertical_offset>
+                            <coupling>False</coupling>
                             <viewports>
                                 
-                                <num_viewport>3</num_viewport>
+                                <num_viewport>2</num_viewport>
                                 
                            </viewports>
                         </analog>
                             <analog>
                             <channel>3</channel>
-                            <name><![CDATA[Ia]]></name>
-                            <is_locked>False</is_locked>
-                            <vertical_scale>Auto</vertical_scale>
-                            <vertical_offset>0.0</vertical_offset>
-                            <coupling>False</coupling>
-                            <viewports>
-                                
-                                <num_viewport>2</num_viewport>
-                                
-                           </viewports>
-                        </analog>
-                            <analog>
-                            <channel>4</channel>
-                            <name><![CDATA[Ib]]></name>
-                            <is_locked>False</is_locked>
-                            <vertical_scale>Auto</vertical_scale>
-                            <vertical_offset>0.0</vertical_offset>
-                            <coupling>False</coupling>
-                            <viewports>
-                                
-                                <num_viewport>2</num_viewport>
-                                
-                           </viewports>
-                        </analog>
-                            <analog>
-                            <channel>5</channel>
-                            <name><![CDATA[Ic]]></name>
-                            <is_locked>False</is_locked>
-                            <vertical_scale>Auto</vertical_scale>
-                            <vertical_offset>0.0</vertical_offset>
-                            <coupling>False</coupling>
-                            <viewports>
-                                
-                                <num_viewport>2</num_viewport>
-                                
-                           </viewports>
-                        </analog>
-                            <analog>
-                            <channel>6</channel>
-                            <name><![CDATA[vdc_out]]></name>
-                            <is_locked>False</is_locked>
-                            <vertical_scale>Auto</vertical_scale>
-                            <vertical_offset>0.0</vertical_offset>
-                            <coupling>False</coupling>
-                            <viewports>
-                                
-                                <num_viewport>1</num_viewport>
-                                
-                           </viewports>
-                        </analog>
-                            <analog>
-                            <channel>7</channel>
-                            <name><![CDATA[nm]]></name>
-                            <is_locked>False</is_locked>
-                            <vertical_scale>Auto</vertical_scale>
-                            <vertical_offset>0.0</vertical_offset>
-                            <coupling>False</coupling>
-                            <viewports>
-                                
-                                <num_viewport>1</num_viewport>
-                                
-                           </viewports>
-                        </analog>
-                            <analog>
-                            <channel>8</channel>
-                            <name><![CDATA[Three Phase Inverter.IGBT Leg1.I_S1]]></name>
+                            <name>Ic</name>
                             <is_locked>False</is_locked>
                             <vertical_scale>Auto</vertical_scale>
                             <vertical_offset>0</vertical_offset>
                             <coupling>False</coupling>
                             <viewports>
                                 
-                                <num_viewport>4</num_viewport>
-                                
-                           </viewports>
-                        </analog>
-                            <analog>
-                            <channel>9</channel>
-                            <name><![CDATA[Three Phase Inverter.IGBT Leg2.I_S1]]></name>
-                            <is_locked>False</is_locked>
-                            <vertical_scale>Auto</vertical_scale>
-                            <vertical_offset>0</vertical_offset>
-                            <coupling>False</coupling>
-                            <viewports>
-                                
-                                <num_viewport>4</num_viewport>
-                                
-                           </viewports>
-                        </analog>
-                            <analog>
-                            <channel>10</channel>
-                            <name><![CDATA[Three Phase Inverter.IGBT Leg3.I_S2]]></name>
-                            <is_locked>False</is_locked>
-                            <vertical_scale>Auto</vertical_scale>
-                            <vertical_offset>0</vertical_offset>
-                            <coupling>False</coupling>
-                            <viewports>
-                                
-                                <num_viewport>4</num_viewport>
+                                <num_viewport>2</num_viewport>
                                 
                            </viewports>
                         </analog>
